@@ -1,0 +1,12 @@
+version: '3'
+services:
+  mysql:
+    container_name: cadmo-db
+    image: mysql:8.0.33
+    environment:
+      - MYSQL_DATABASE=nodefit
+      - MYSQL_ROOT_PASSWORD=Root
+    ports:
+      - '3306:3306'
+    expose:
+      - 3306
