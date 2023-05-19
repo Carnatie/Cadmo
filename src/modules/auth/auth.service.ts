@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { CreateUserDto } from './auth.dto';
 import { PrismaService } from 'src/providers/prisma/prisma.service';
+import { cryptPassword } from 'src/utils/bcript';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +13,7 @@ export class AuthService {
       data: {
         email: data.email,
         name: data.name,
-        password: data.password,
+        password: await cryptPassword(data.password),
         role: 'USER',
       },
     });
