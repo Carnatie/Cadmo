@@ -28,25 +28,18 @@ export class UsersService {
     return user;
   }
   async getUserByEmail(email: string) {
-    const user = await this.prisma.user.findUnique({
+    const userEmail = await this.prisma.user.findFirst({
       where: { email },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-      },
     });
-    if (!user) {
+    if (userEmail) {
       throw new HttpException(
         {
-          status: HttpStatus.BAD_REQUEST,
-          error: 'User not found!',
+          status: HttpStatus.CONFLICT,
+          error: 'Email already registered',
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.CONFLICT,
       );
     }
-    return user;
   }
 
   async getUsers() {
