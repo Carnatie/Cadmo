@@ -6,7 +6,7 @@ import { updateUserDto } from './users.dto';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async getUser(id: number) {
+  async getUserById(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { id },
       select: {
@@ -27,22 +27,8 @@ export class UsersService {
     }
     return user;
   }
-  async getUserByEmail(email: string) {
-    const userEmail = await this.prisma.user.findFirst({
-      where: { email },
-    });
-    if (userEmail) {
-      throw new HttpException(
-        {
-          status: HttpStatus.CONFLICT,
-          error: 'Email already registered',
-        },
-        HttpStatus.CONFLICT,
-      );
-    }
-  }
 
-  async getUsers() {
+  async getAllUsers() {
     const users = await this.prisma.user.findMany({
       select: {
         id: true,
@@ -94,5 +80,20 @@ export class UsersService {
     }
     await this.prisma.user.deleteMany({ where: { id } });
     return HttpStatus.ACCEPTED;
+  }
+
+  async ifEmailAlreadyRegistered(email: string) {
+    const userEmail = await this.prisma.user.findFirst({
+      where: { email },
+    });
+    if (userEmail) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: 'Email already registered',
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
   }
 }

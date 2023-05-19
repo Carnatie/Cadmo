@@ -16,12 +16,12 @@ export class UsersController {
 
   @Get(':userId')
   getUser(@Param('userId', ParseIntPipe) id: number) {
-    return this.usersService.getUser(id);
+    return this.usersService.getUserById(id);
   }
 
   @Get()
   getUsers() {
-    return this.usersService.getUsers();
+    return this.usersService.getAllUsers();
   }
 
   @Put(':userId')

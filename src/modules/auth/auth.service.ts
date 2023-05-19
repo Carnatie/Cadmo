@@ -6,9 +6,13 @@ import { cryptPassword } from 'src/utils/bcript';
 
 @Injectable()
 export class AuthService {
-  constructor(private user: UsersService, private prisma: PrismaService) {}
+  constructor(
+    private usersService: UsersService,
+    private prisma: PrismaService,
+  ) {}
+
   async registerUser(data: CreateUserDto) {
-    await this.user.getUserByEmail(data.email);
+    await this.usersService.ifEmailAlreadyRegistered(data.email);
     const createUser = await this.prisma.user.create({
       data: {
         email: data.email,
